@@ -6,7 +6,7 @@
 
 
 
-Aplikasi Absensi TURI MUKA, Aplikasi ini memuat API dan penyaluran berbentuk web, untuk fungsionalitas lebih lanjut akan dibuatkan dalam mobile.
+Aplikasi Absensi **TURI MUKA**, Aplikasi ini memuat *API* dan penyaluran berbentuk web, untuk fungsionalitas lebih lanjut akan dibuatkan dalam mobile.
 Rules pertama
 
 1. Fitur Login                -> menggunakan nip dan password
