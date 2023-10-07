@@ -1,6 +1,7 @@
 # DARKANGEL
 
-![fix 1](https://github.com/yoviepramudya1412/DARKANGEL-WEB/assets/82030481/cdbdc0b5-b3fb-4cbe-b05a-a470591010dc)
+![fix 1](https://github.com/yoviepramudya1412/DARKANGEL-WEB/assets/82030481/b7cf66e5-f69f-4698-8091-bdf02927a687)
+
 
 
 
