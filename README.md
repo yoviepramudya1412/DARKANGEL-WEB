@@ -1,4 +1,7 @@
 # DARKANGEL
+<span style="color: red"> ## TURIMUKA</span>
+<font color="#0000ff">Tulisan berwarna biru</font>
+
 Aplikasi Absensi TURI MUKA, Aplikasi ini memuat API dan penyaluran berbentuk web, untuk fungsionalitas lebih lanjut akan dibuatkan dalam mobile.
 Rules pertama
 
