@@ -99,17 +99,17 @@ class Absensi(models.Model):
     pengolahan = models.ForeignKey(Pengolahan, on_delete=models.CASCADE)
     tanggal_absensi = models.DateTimeField(default=timezone.now)
     status_absensi = models.CharField(max_length=255, choices=ABSENCE_STATUS_CHOICES, default='sudah absen')
-    sisa_absensi = models.IntegerField(default=0)
+    
     berapa_kali_absensi = models.IntegerField(default=2)
 
-    def save(self, *args, **kwargs):
-        # Menghitung sisa_absensi berdasarkan status_absensi dan berapa_kali_absensi
-        if self.status_absensi == 'sudah absen':
-            self.sisa_absensi = self.berapa_kali_absensi - 1
-        else:
-            self.sisa_absensi = self.berapa_kali_absensi
+    # def save(self, *args, **kwargs):
+    #     # Menghitung sisa_absensi berdasarkan status_absensi dan berapa_kali_absensi
+    #     if self.status_absensi == 'sudah absen':
+    #         self.sisa_absensi = self.berapa_kali_absensi - 1
+    #     else:
+    #         self.sisa_absensi = self.berapa_kali_absensi
         
-        super(Absensi, self).save(*args, **kwargs)
+    #     super(Absensi, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.staff.nama} - {self.tanggal_absensi}"
