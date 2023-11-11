@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
-from .models import CustomUser,Pengolahan
+from .models import Absensi, CustomUser,Pengolahan
 from .serializers import CustomUserSerializer,PengolahanSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from deepface import DeepFace
@@ -91,6 +91,14 @@ def face_recognition_api(request):
             # Extract relevant information from the result
             verified = result['verified']
             verified_list.append(verified)
+            
+            if verified:
+                absensi_instance = Absensi.objects.create(
+                    staff=request.user,
+                    pengolahan=pengolahan_instance,
+                    status_absensi='sudah absen',
+                    sisa_absensi=max(0, pengolahan_instance.berapa_kali_absensi - 1),
+                )
 
         except Exception as e:
             print(f"Error in deepface.verify: {str(e)}")
