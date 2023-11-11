@@ -19,3 +19,5 @@ Tabel yang digunakan :
 2. Tabel Pengolahan
 3. Tabel Absensi
 
+![image](https://github.com/yoviepramudya1412/DARKANGEL-WEB/assets/82030481/44b1eaa8-59fb-4d5a-a0e7-30a87fc369b8)
+buat konfigurasi mysql terlebih dahulu
