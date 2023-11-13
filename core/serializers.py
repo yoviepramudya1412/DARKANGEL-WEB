@@ -1,17 +1,16 @@
-from rest_framework import serializers
-from .models import Dosen, Pengolahan, Absensi
 
-class DosenSerializer(serializers.ModelSerializer):
+
+from rest_framework import serializers
+from .models import CustomUser, Pengolahan
+
+class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Dosen
-        fields = '__all__'
+        model = CustomUser
+        fields = ('id', 'nip', 'nama', 'umur', 'golongan', 'is_active', 'is_staff', 'is_superuser')
 
 class PengolahanSerializer(serializers.ModelSerializer):
+    staff = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Pengolahan
-        fields = '__all__'
-
-class AbsensiSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Absensi
-        fields = '__all__'
+        fields = ('id', 'staff', 'sampel_1', 'sampel_2', 'profil')
