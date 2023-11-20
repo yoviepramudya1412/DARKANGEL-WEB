@@ -30,15 +30,15 @@ admin.site.register(Pengolahan, PengolahanAdmin)
 
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
-    list_display = [ 'nip', 'nama', 'umur', 'golongan', 'is_active', 'is_staff', 'is_superuser']
+    list_display = [ 'nip','profil', 'nama', 'umur', 'golongan', 'is_active', 'is_staff', 'is_superuser']
     fieldsets = (
-        (None, {'fields': ('nip', 'nama', 'umur', 'golongan')}),
+        (None, {'fields': ('nip', 'nama','profil', 'umur', 'golongan')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser')}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('nip', 'nama', 'umur', 'golongan', 'is_active', 'is_staff', 'is_superuser', 'password1', 'password2'),
+            'fields': ('nip', 'nama','profil', 'umur', 'golongan', 'is_active', 'is_staff', 'is_superuser', 'password1', 'password2'),
         }),
     )
     search_fields = ['nip', 'nama']
@@ -46,7 +46,11 @@ class CustomUserAdmin(UserAdmin):
 
 admin.site.register(CustomUser, CustomUserAdmin)
 
+class AbsensiAdmin(admin.ModelAdmin):
+    list_display = ('staff', 'pengolahan', 'tanggal_absensi', 'status_absensi', 'berapa_kali_absensi')
+    search_fields = ('staff__username', 'pengolahan__nama')  # Menambahkan kolom pencarian
 
+admin.site.register(Absensi, AbsensiAdmin)
 
 
 

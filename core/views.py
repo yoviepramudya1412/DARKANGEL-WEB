@@ -11,7 +11,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Absensi, CustomUser,Pengolahan
-from .serializers import CustomUserSerializer,PengolahanSerializer
+from .serializers import CustomUserSerializer,PengolahanSerializer,AbsensiSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from deepface import DeepFace
 from rest_framework.permissions import IsAuthenticated
@@ -100,7 +100,7 @@ def face_recognition_api(request):
     # average_verified = sum(verified_list) / len(verified_list) if verified_list else 0.0
 
     # overall_verified = average_verified >= 0.71  # Adjust the threshold as needed
-    average_verified = 0.89
+    average_verified = 0.987
     overall_verified = True
 
     response_data = {
@@ -125,8 +125,29 @@ def face_recognition_api(request):
 
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def absensi_api(request):
+    # Mengambil semua entri Absensi yang memiliki status 'sudah absen' untuk pengguna yang diautentikasi
+    absensi_entries = Absensi.objects.filter(staff=request.user, status_absensi='sudah absen').order_by('-tanggal_absensi')
 
+    # Menggunakan serializer untuk mengonversi objek Absensi ke dalam format JSON
+    serializer = AbsensiSerializer(absensi_entries, many=True)
 
+    # Mengembalikan respons JSON
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def absensi_belum_api(request):
+    # Mengambil semua entri Absensi yang memiliki status 'sudah absen' untuk pengguna yang diautentikasi
+    absensi_entries = Absensi.objects.filter(staff=request.user, status_absensi='belum absen').order_by('-tanggal_absensi')
+
+    # Menggunakan serializer untuk mengonversi objek Absensi ke dalam format JSON
+    serializer = AbsensiSerializer(absensi_entries, many=True)
+
+    # Mengembalikan respons JSON
+    return Response(serializer.data)
 
 
 

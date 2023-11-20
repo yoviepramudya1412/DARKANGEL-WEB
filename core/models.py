@@ -39,10 +39,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     nip = models.CharField(max_length=20, unique=True)
     nama = models.CharField(max_length=255)
     umur = models.IntegerField()
+    profil = models.ImageField(upload_to='profil/', null=True, blank=True)
     golongan = models.CharField(max_length=10)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    
     
     objects = CustomUserManager()
 
