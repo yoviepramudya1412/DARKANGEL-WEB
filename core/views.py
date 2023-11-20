@@ -76,7 +76,7 @@ def face_recognition_api(request):
                 align=True,
                 normalization='base',
             )
-
+            print(f'result deepface{result}')
             verified = True
             verified_list.append(verified)
 
