@@ -13,7 +13,7 @@ from tqdm import tqdm
 import pickle
 
 from deepface.basemodels import VGGFace, Facenet
-from deepface.extendedmodels import Age, Gender, Race, Emotion
+
 from deepface.commons import functions, realtime, distance as dst
 from deepface.fusion import Voting
 

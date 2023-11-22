@@ -99,7 +99,7 @@ class Absensi(models.Model):
     id = models.AutoField(primary_key=True)
     staff = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='absensi')
     pengolahan = models.ForeignKey(Pengolahan, on_delete=models.CASCADE)
-    tanggal_absensi = models.DateTimeField(default=timezone.now)
+    tanggal_absensi = models.DateTimeField(auto_now_add=True)
     status_absensi = models.CharField(max_length=255, choices=ABSENCE_STATUS_CHOICES, default='sudah absen')
     
     berapa_kali_absensi = models.IntegerField(default=2)

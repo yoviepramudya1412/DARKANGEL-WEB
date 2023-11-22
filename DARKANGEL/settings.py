@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'admin_soft.apps.AdminSoftDashboardConfig',
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
@@ -96,7 +97,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
     'SLIDING_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
@@ -113,7 +114,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'darkangel',
         'USER': 'darkangel',
-        'PASSWORD': 'CTA..X9jArI*U4ez',
+        'PASSWORD': 'y/X7pPH]VCmw]Mp5',
         'HOST': 'localhost',   # Ganti dengan alamat host MySQL jika berbeda
         'PORT': '3306',        # Port MySQL (biasanya 3306)
         'OPTIONS': {
@@ -162,7 +163,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Jakarta'
 
 USE_I18N = True
 

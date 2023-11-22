@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from rest_framework import generics
 
+import sys, os
+sys.path.insert(1, "api-fs")
+# print("------CURRENT DIR:", os.getcwd())
 
-
-
+from deepface import DeepFace
 from django.shortcuts import get_list_or_404
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
@@ -13,7 +15,6 @@ from rest_framework import status
 from .models import Absensi, CustomUser,Pengolahan
 from .serializers import CustomUserSerializer,PengolahanSerializer,AbsensiSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
-from deepface import DeepFace
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.core.files.base import ContentFile
@@ -33,6 +34,12 @@ from django.db.models import Count, Avg
 
 import os
 from pathlib import Path
+
+
+from statistics import mean
+
+
+
 
 
 @csrf_exempt
@@ -56,59 +63,78 @@ def face_recognition_api(request):
         for chunk in uploaded_image.chunks():
             destination.write(chunk)
 
-    verified_list = []
-    absensi_created = False  # Tambahkan variabel untuk melacak apakah absensi sudah dibuat
+    results = {'thresholds': [], 'distances': []}
 
     for pengolahan_instance in pengolahan_instances:
         image_path = Path(pengolahan_instance.sampel_2.path)
 
         print(f"image_path: {image_path}")
         print(f"uploaded_image_name: {uploaded_image.name}")
-
+        image_pairs= [(image_path,temporary_image_path) ]    
+        print(f"image_pairs{image_pairs}")
         try:
-            result = DeepFace.verify(
-                img1_path=str(image_path),
-                img2_path=str(temporary_image_path),
-                model_name="VGG-Face",
-                distance_metric='cosine',
-                enforce_detection=False,
-                detector_backend='opencv',
-                align=True,
-                normalization='base',
-            )
-            print(f'result deepface{result}')
-            verified = True
-            verified_list.append(verified)
+            # Verifikasi menggunakan model VGG-Face
+            # result_vgg = DeepFace.verify(
+            #     img1_path=str(image_path),
+            #     img2_path=str(temporary_image_path),
+            #     model_name="VGG-Face",
+            #     distance_metric='cosine',
+            #     enforce_detection=False,
+            #     detector_backend='opencv',
+            #     align=True,
+            #     normalization='base',
+            # )
+            # print(f'result VGG-Face: {result_vgg}')
+            # results['thresholds'].append(result_vgg['threshold'])
+            # results['distances'].append(result_vgg['distance'])
 
-            if verified and not absensi_created:  # Tambahkan kondisi untuk memeriksa apakah absensi sudah dibuat
-                absensi_entry = Absensi.objects.create(
-                    staff=request.user,
-                    pengolahan=pengolahan_instance,
-                    status_absensi='sudah absen',
-                    
-                    berapa_kali_absensi=2  # Atur sesuai kebutuhan
-                )
-                absensi_created = True
-                absensi_entry.save()
-
+            # # Verifikasi menggunakan model Facenet
+            # result_facenet = DeepFace.verify(
+            #     img1_path=str(image_path),
+            #     img2_path=str(temporary_image_path),
+            #     model_name="Facenet",
+            #     distance_metric='cosine',
+            #     enforce_detection=False,
+            #     detector_backend='opencv',
+            #     align=True,
+            #     normalization='base',
+            # )
+            # print(f'result Facenet: {result_facenet}')
+            # results['thresholds'].append(result_facenet['threshold'])
+            # results['distances'].append(result_facenet['distance'])
+            results = DeepFace.verify(img1_path=str(image_path),
+                img2_path=str(temporary_image_path), model_name= ["VGG-Face", "Facenet"],
+                               voting_method = "based on threshold", distance_metric="cosine",enforce_detection=False)
+            print(f"hasil_akhir{results}")
         except Exception as e:
             print(f"Error in deepface.verify: {str(e)}")
             return Response({'error': str(e)}, status=500)
 
     temporary_image_path.unlink()
 
-    # average_verified = sum(verified_list) / len(verified_list) if verified_list else 0.0
-
-    # overall_verified = average_verified >= 0.71  # Adjust the threshold as needed
-    average_verified = 0.987
-    overall_verified = True
+    # Proses hasil
+    voting_results = {
+        "verified":results
+    # 'verified': all(result for result in results),  # Menggunakan nilai boolean langsung
+    # 'average_threshold': mean(results['thresholds']),
+    # 'average_distance': mean(results['distances']),
+}
+    # print(f'Hasil AKhir Voting{voting_results}')
+    # Tambahkan logika untuk menyimpan ke model Absensi
+    if voting_results['verified']:
+        absensi_entry = Absensi.objects.create(
+            staff=request.user,
+            pengolahan=pengolahan_instance,
+            status_absensi='sudah absen',
+            berapa_kali_absensi=2  # Sesuaikan sesuai kebutuhan
+        )
+        absensi_entry.save()
 
     response_data = {
-        'verified': overall_verified,
-        'average_distance': average_verified,
+        'voting_results': voting_results,
     }
-
     return Response(response_data)
+
 
 
 

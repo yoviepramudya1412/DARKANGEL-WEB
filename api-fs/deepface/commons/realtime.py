@@ -10,7 +10,7 @@ import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 from deepface import DeepFace
-from deepface.extendedmodels import Age
+# from deepface.extendedmodels import Age
 from deepface.commons import functions, realtime, distance as dst
 from deepface.detectors import FaceDetector
 
