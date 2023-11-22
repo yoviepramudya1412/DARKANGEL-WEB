@@ -12,7 +12,7 @@ import pandas as pd
 from tqdm import tqdm
 import pickle
 
-from deepface.basemodels import VGGFace, OpenFace, Facenet, Facenet512, FbDeepFace, DeepID, DlibWrapper, Seresnet18, ArcFace, SFace, Boosting
+from deepface.basemodels import VGGFace, Facenet
 from deepface.extendedmodels import Age, Gender, Race, Emotion
 from deepface.commons import functions, realtime, distance as dst
 from deepface.fusion import Voting
@@ -45,19 +45,8 @@ def build_model(model_name):
 
 	models = {
 		'VGG-Face': VGGFace.loadModel,
-		'OpenFace': OpenFace.loadModel,
 		'Facenet': Facenet.loadModel,
-		'Facenet512': Facenet512.loadModel,
-		'DeepFace': FbDeepFace.loadModel,
-		'DeepID': DeepID.loadModel,
-		'Dlib': DlibWrapper.loadModel,
-		'Seresnet18': Seresnet18.loadModel,
-		'ArcFace': ArcFace.loadModel,
-		'SFace': SFace.load_model,
-		'Emotion': Emotion.loadModel,
-		'Age': Age.loadModel,
-		'Gender': Gender.loadModel,
-		'Race': Race.loadModel
+
 	}
 
 	if not "model_obj" in globals():
@@ -74,7 +63,7 @@ def build_model(model_name):
 
 	return model_obj[model_name]
 
-def verify(img1_path, img2_path = '', model_name = ['Dlib', 'Serenset18'], distance_metric = 'cosine', model = None, enforce_detection = True, detector_backend = 'opencv', align = True, prog_bar = True, normalization = 'base', voting_method = "based on threshold"):
+def verify(img1_path, img2_path = '', model_name = ['VGG-Face', 'Facenet'], distance_metric = 'cosine', model = None, enforce_detection = True, detector_backend = 'opencv', align = True, prog_bar = True, normalization = 'base', voting_method = "based on threshold"):
 
 	tic = time.time()
     
@@ -86,7 +75,7 @@ def verify(img1_path, img2_path = '', model_name = ['Dlib', 'Serenset18'], dista
 	#--------------------------------
 
 	if model_name == 'Ensemble':
-		model_names = ["VGG-Face", "Facenet", "OpenFace", "DeepFace"]
+		model_names = ["VGG-Face", "Facenet"]
 		metrics = ["cosine", "euclidean", "euclidean_l2"]
 	elif type(model_name) == list: # tes array model
 		model_names = model_name; metrics = []
