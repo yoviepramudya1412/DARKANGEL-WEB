@@ -18,6 +18,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.core.files.base import ContentFile
+from django.utils import timezone
 
 import numpy as np
 import cv2
@@ -42,7 +43,6 @@ from statistics import mean
 
 
 
-@csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def face_recognition_api(request):
@@ -63,77 +63,75 @@ def face_recognition_api(request):
         for chunk in uploaded_image.chunks():
             destination.write(chunk)
 
-    results = {'thresholds': [], 'distances': []}
+    verified_list = []
 
     for pengolahan_instance in pengolahan_instances:
         image_path = Path(pengolahan_instance.sampel_2.path)
 
         print(f"image_path: {image_path}")
         print(f"uploaded_image_name: {uploaded_image.name}")
-        image_pairs= [(image_path,temporary_image_path) ]    
-        print(f"image_pairs{image_pairs}")
-        try:
-            # Verifikasi menggunakan model VGG-Face
-            # result_vgg = DeepFace.verify(
-            #     img1_path=str(image_path),
-            #     img2_path=str(temporary_image_path),
-            #     model_name="VGG-Face",
-            #     distance_metric='cosine',
-            #     enforce_detection=False,
-            #     detector_backend='opencv',
-            #     align=True,
-            #     normalization='base',
-            # )
-            # print(f'result VGG-Face: {result_vgg}')
-            # results['thresholds'].append(result_vgg['threshold'])
-            # results['distances'].append(result_vgg['distance'])
 
-            # # Verifikasi menggunakan model Facenet
-            # result_facenet = DeepFace.verify(
-            #     img1_path=str(image_path),
-            #     img2_path=str(temporary_image_path),
-            #     model_name="Facenet",
-            #     distance_metric='cosine',
-            #     enforce_detection=False,
-            #     detector_backend='opencv',
-            #     align=True,
-            #     normalization='base',
-            # )
-            # print(f'result Facenet: {result_facenet}')
-            # results['thresholds'].append(result_facenet['threshold'])
-            # results['distances'].append(result_facenet['distance'])
-            results = DeepFace.verify(img1_path=str(image_path),
-                img2_path=str(temporary_image_path), model_name= ["VGG-Face", "Facenet"],
-                               voting_method = "based on threshold", distance_metric="cosine",enforce_detection=False)
+        try:
+            results = DeepFace.verify( img1_path=str(image_path),
+                                        img2_path=str(temporary_image_path),
+                                        model_name=["VGG-Face", "Facenet"],
+                                        voting_method="based on threshold",
+                                        distance_metric="cosine",
+                                        enforce_detection=False)
             print(f"hasil_akhir{results}")
+
+            # Menambahkan nilai 'verified' ke dalam daftar
+            verified_list.append(results['verified'])
+
         except Exception as e:
             print(f"Error in deepface.verify: {str(e)}")
             return Response({'error': str(e)}, status=500)
 
     temporary_image_path.unlink()
 
-    # Proses hasil
-    voting_results = {
-        "verified":results
-    # 'verified': all(result for result in results),  # Menggunakan nilai boolean langsung
-    # 'average_threshold': mean(results['thresholds']),
-    # 'average_distance': mean(results['distances']),
-}
-    # print(f'Hasil AKhir Voting{voting_results}')
-    # Tambahkan logika untuk menyimpan ke model Absensi
-    if voting_results['verified']:
-        absensi_entry = Absensi.objects.create(
-            staff=request.user,
-            pengolahan=pengolahan_instance,
-            status_absensi='sudah absen',
-            berapa_kali_absensi=2  # Sesuaikan sesuai kebutuhan
-        )
-        absensi_entry.save()
+    # Menghitung hasil voting
+    print(f"isi voting = {verified_list}")
+    overall_verified = sum(verified_list) > len(verified_list) / 2
+    print(f"Hasil_final = {overall_verified}")
+    # Logika penyimpanan ke dalam model Absensi
+    current_time = timezone.now()
+    deadline_time = current_time.replace(hour=8, minute=30, second=0, microsecond=0)
+
+    # if overall_verified:
+    #     absensi_entry = Absensi.objects.create(
+    #         staff=request.user,
+    #         pengolahan=pengolahan_instance,
+    #         status_absensi='sudah absen',
+    #         berapa_kali_absensi=2  # Sesuaikan sesuai kebutuhan
+    #     )
+    absensi_entry.save()
+    # Logika penyimpanan ke dalam model Absensi
+    if overall_verified:
+        total_savings = Absensi.objects.filter(staff=request.user).count()
+        if total_savings < 2:
+            if current_time > deadline_time:
+                status_absensi = 'belum absen'
+            else:
+                status_absensi = 'sudah absen'
+
+            absensi_entry = Absensi.objects.create(
+                staff=request.user,
+                pengolahan=pengolahan_instance,
+                status_absensi=status_absensi,
+                berapa_kali_absensi=2  # Sesuaikan sesuai kebutuhan
+            )
+            absensi_entry.save()
 
     response_data = {
-        'voting_results': voting_results,
+        'voting_results': {
+            'verified': overall_verified,
+            'count_true': sum(verified_list),
+            'count_false': len(verified_list) - sum(verified_list),
+            'total_votes': len(verified_list),
+        },
     }
     return Response(response_data)
+
 
 
 
