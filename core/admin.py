@@ -17,7 +17,7 @@ class CustomImageForm(forms.ModelForm):
         fields = ['sampel_1','sampel_2']
 
 class PengolahanAdmin(admin.ModelAdmin):
-    list_display = ('id', 'staff', 'sampel_2')
+    list_display = ('id', 'staff','sampel_1', 'sampel_2')
     search_fields = ('staff__nama',)  # Mencari berdasarkan nama staff
     form = PengolahanForm
 

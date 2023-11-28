@@ -19,6 +19,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.core.files.base import ContentFile
 from django.utils import timezone
+from django.core.files import File
 
 import numpy as np
 import cv2
@@ -66,6 +67,9 @@ def face_recognition_api(request):
     verified_list = []
 
     for pengolahan_instance in pengolahan_instances:
+        # Memeriksa apakah sampel_2 ada atau tidak
+        if not pengolahan_instance.sampel_2:
+            continue 
         image_path = Path(pengolahan_instance.sampel_2.path)
 
         print(f"image_path: {image_path}")
@@ -87,7 +91,6 @@ def face_recognition_api(request):
             print(f"Error in deepface.verify: {str(e)}")
             return Response({'error': str(e)}, status=500)
 
-    temporary_image_path.unlink()
 
     # Menghitung hasil voting
     print(f"isi voting = {verified_list}")
@@ -97,30 +100,44 @@ def face_recognition_api(request):
     current_time = timezone.now()
     deadline_time = current_time.replace(hour=8, minute=30, second=0, microsecond=0)
 
-    # if overall_verified:
-    #     absensi_entry = Absensi.objects.create(
-    #         staff=request.user,
-    #         pengolahan=pengolahan_instance,
-    #         status_absensi='sudah absen',
-    #         berapa_kali_absensi=2  # Sesuaikan sesuai kebutuhan
-    #     )
-    absensi_entry.save()
-    # Logika penyimpanan ke dalam model Absensi
     if overall_verified:
-        total_savings = Absensi.objects.filter(staff=request.user).count()
-        if total_savings < 2:
-            if current_time > deadline_time:
-                status_absensi = 'belum absen'
-            else:
-                status_absensi = 'sudah absen'
-
-            absensi_entry = Absensi.objects.create(
+        absensi_entry = Absensi.objects.create(
+            staff=request.user,
+            pengolahan=pengolahan_instance,
+            status_absensi='sudah absen',
+            berapa_kali_absensi=2  # Sesuaikan sesuai kebutuhan
+        )
+        absensi_entry.save()
+        new_pengolahan = Pengolahan.objects.create(
                 staff=request.user,
-                pengolahan=pengolahan_instance,
-                status_absensi=status_absensi,
-                berapa_kali_absensi=2  # Sesuaikan sesuai kebutuhan
+                sampel_1=uploaded_image  # Menyimpan gambar dari temporary_image_path
             )
-            absensi_entry.save()
+
+            # Simpan objek Pengolahan baru
+        new_pengolahan.save()
+    temporary_image_path.unlink()
+                
+    # Logika penyimpanan ke dalam model Absensi
+    # if overall_verified:
+    #     total_savings = Absensi.objects.filter(staff=request.user).count()
+    #     if total_savings < 2:
+    #         if current_time > deadline_time:
+    #             status_absensi = 'belum absen'
+    #         else:
+    #             status_absensi = 'sudah absen'
+            # with open(temporary_image_path, 'rb') as file:
+            #     file_obj = File(file)
+            #     # Menyimpan gambar ke model Pengolahan jika overall_verified adalah True
+            #     pengolahan_instance.sampel_1.save(uploaded_image.name, file_obj, save=True)
+    #         absensi_entry = Absensi.objects.create(
+    #             staff=request.user,
+    #             pengolahan=pengolahan_instance,
+    #             status_absensi=status_absensi,
+    #             berapa_kali_absensi=2  # Sesuaikan sesuai kebutuhan
+    #         )
+    #         absensi_entry.save()
+    # pengolahan_instance.sampel_1 = temporary_image_path
+    # pengolahan_instance.save()
 
     response_data = {
         'voting_results': {
