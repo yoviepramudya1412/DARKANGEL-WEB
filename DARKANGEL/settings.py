@@ -122,6 +122,16 @@ DATABASES = {
         },
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'darkangel',
+#         'USER': 'postgres',
+#         'PASSWORD': 'yoviepramudya',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
 STATIC_URL = '/static/'
 
 MEDIA_URL= '/image/'
