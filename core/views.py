@@ -1,5 +1,10 @@
-from django.shortcuts import render
+from django.forms import ImageField
+from django.shortcuts import render,  redirect 
+
+from django.contrib import messages
+
 from rest_framework import generics
+from django.conf import settings
 
 import sys, os
 sys.path.insert(1, "api-fs")
@@ -10,6 +15,7 @@ from django.shortcuts import get_list_or_404
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from django.contrib.auth.decorators import login_required
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Absensi, CustomUser,Pengolahan
@@ -20,19 +26,29 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.core.files.base import ContentFile
 from django.utils import timezone
 from django.core.files import File
-
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import get_user_model
 import numpy as np
 import cv2
 import io
 
+from PIL import Image
+import numpy as np
+import cv2
+from mtcnn.mtcnn import MTCNN
+
+from django.core.files.images import ImageFile
+from PIL import Image
 
 
 from PIL import Image
 from io import BytesIO
 from django.http import JsonResponse
 import base64
-
+from django.views.decorators.csrf import csrf_protect
 from django.db.models import Count, Avg
+from django.contrib.auth import authenticate, login
+from django.db.models import Q
 
 import os
 from pathlib import Path
@@ -242,6 +258,195 @@ class StaffDetail(generics.RetrieveAPIView):
 
 
 
-# Create your views here.
+# Percobaan render 
 def test(request):
     return render(request, 'pengguna/test.html')
+def landingpage(request):
+    return render(request, 'landingpage/index.html')
+
+
+
+
+
+def user_login(request):
+    if request.method == 'POST':
+        nip = request.POST.get('nip')
+        password = request.POST.get('lpassword')
+
+        # Authenticate user
+        user = authenticate(request, nip=nip, password=password)
+
+        if user is not None:
+            # User authenticated, log them in
+            login(request, user)
+            messages.success(request, 'Login successful.')
+            return redirect('dashboard')  # Ganti 'home' dengan nama URL tujuan setelah login
+        else:
+            # User authentication failed
+            messages.error(request, 'Invalid NIP or password.')
+            return redirect('masuk')
+
+    return render(request, 'landingpage/log-in.html')
+
+def logout_view(request):
+    logout(request)
+    request.session.flush()
+    return redirect('masuk')
+
+
+@login_required(login_url=settings.LOGIN_URL)
+def dashboard(request):
+    user_profil_url = None
+    user_nama = None
+
+    if request.user.is_authenticated:
+        user_profil_url = request.user.profil.url if request.user.profil else None
+        user_nama = request.user.nama
+    context= {  'user_profil_url': user_profil_url,
+                'user_nama': user_nama,
+                
+                }
+    return render(request, 'pengguna/dashboard.html', context)
+
+
+def cek_nip(request):
+    if request.method == 'GET':
+        cek_nip = request.GET.get('cekNIP')
+
+        try:
+            user = get_user_model().objects.get(nip=cek_nip)
+            response_data = {
+                'found': True,
+                'nama': user.nama,
+                'nip': user.nip,
+            }
+        except get_user_model().DoesNotExist:
+            response_data = {
+                'found': False,
+            }
+
+        return JsonResponse(response_data)
+
+    return render(request, 'pengguna/form/form.html')
+
+
+@login_required(login_url=settings.LOGIN_URL)
+def form_pengguna(request):
+    
+    user_profil_url = None
+    user_nama = None
+
+    if request.user.is_authenticated:
+        user_profil_url = request.user.profil.url if request.user.profil else None
+        user_nama = request.user.nama
+    context= {  'user_profil_url': user_profil_url,
+                'user_nama': user_nama,
+                
+                }
+    return render(request, 'pengguna/form/form.html',context)
+
+
+
+
+@login_required(login_url=settings.LOGIN_URL)
+def tambahfoto(request):
+    if request.method == 'POST':
+        staff_nama = request.POST.get('nama')
+        sampel_files = request.FILES.getlist('sampel')  
+        print(f'staff_nama: {staff_nama}')
+        staff = get_object_or_404(CustomUser, nama__iexact=staff_nama)
+
+        try:
+            for sampel_file in sampel_files:
+                # Simpan gambar sementara di server
+                temporary_image_path = f'temp/temporary_image_{sampel_file.name}.jpg'
+                with open(temporary_image_path, 'wb+') as destination:
+                    for chunk in sampel_file.chunks():
+                        destination.write(chunk)
+
+                # Deteksi wajah menggunakan MTCNN
+                image = cv2.imread(temporary_image_path)
+                detector = MTCNN()
+                results = detector.detect_faces(image)
+
+                if results:
+                    # Ambil koordinat wajah pertama yang terdeteksi
+                    x, y, w, h = results[0]['box']
+
+                    # Crop wajah dari gambar
+                    face_cropped = image[y:y+h, x:x+w]
+
+                    # Simpan gambar wajah yang sudah di-crop ke dalam objek Pengolahan
+                    image_array = Image.fromarray(cv2.cvtColor(face_cropped, cv2.COLOR_BGR2RGB))
+                    face_cropped_path = f'temp/face_cropped_{sampel_file.name}.jpg'
+                    image_array.save(face_cropped_path)
+
+                    pengolahan_obj = Pengolahan(staff=staff)
+                    pengolahan_obj.sampel_2.save(f'face_cropped_{sampel_file.name}.jpg', ImageFile(open(face_cropped_path, 'rb')))
+                    
+                    # Hapus gambar sementara di server
+                    os.remove(temporary_image_path)
+                    os.remove(face_cropped_path)
+
+                    messages.success(request, 'Foto berhasil ditambahkan!')
+                else:
+                    messages.warning(request, f'Wajah tidak ditemukan pada gambar {sampel_file.name}.')
+                    return redirect('tabel_1')
+
+            return redirect('form')
+        except Exception as e:
+            messages.error(request, f'Terjadi kesalahan: {str(e)}')
+
+    # Handle request method selain POST
+    return render(request, 'pengguna/form/form.html')
+
+
+
+@login_required(login_url=settings.LOGIN_URL)
+def tabel_sampel(request):
+    user_profil_url = None
+    user_nama = None
+
+    if request.user.is_authenticated:
+        user_profil_url = request.user.profil.url if request.user.profil else None
+        user_nama = request.user.nama
+
+        # Ambil data Pengolahan berdasarkan staff (user yang sedang login)
+        # Filter baris dengan sampel_2 yang tidak null atau kosong
+        pengolahan_data = Pengolahan.objects.filter(Q(sampel_2=None) and ~Q(sampel_2=''))
+        
+        context = {
+            'user_profil_url': user_profil_url,
+            'user_nama': user_nama,
+            'pengolahan_data': pengolahan_data,  # Tambahkan data Pengolahan ke dalam konteks
+        }
+
+        return render(request, 'pengguna/tabel/sampel_1.html', context)
+
+    # Handle request method selain POST
+    return render(request, 'pengguna/tabel/sampel_1.html')
+
+@login_required(login_url=settings.LOGIN_URL)
+def delete_pengolahan(request, pengolahan_id):
+    pengolahan = get_object_or_404(Pengolahan, id=pengolahan_id)
+
+    # Pastikan hanya staf yang memiliki hak akses untuk menghapus data Pengolahan
+    if request.user == pengolahan.staff:
+        # Hapus file gambar terkait sebelum menghapus objek Pengolahan
+        if pengolahan.sampel_1:
+            pengolahan.sampel_1.delete()
+        if pengolahan.sampel_2:
+            pengolahan.sampel_2.delete()
+        
+
+        # Hapus objek Pengolahan
+        pengolahan.delete()
+
+        messages.success(request, 'Data Pengolahan berhasil dihapus.')
+    else:
+        messages.error(request, 'Anda tidak memiliki izin untuk menghapus data ini.')
+
+    return redirect('tabel_1')
+
+def tabel_sampel_2(request):
+    return render(request, 'pengguna/tabel/sampel_2.html')

@@ -1,0 +1,311 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<body>
+<div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+            <a class="navbar-brand brand-logo mr-5" href="index.html"><img src="{% static 'assets/image/LOGO-DASH.svg' %}" class="mr-2" alt="logo"/></a>
+            <a class="navbar-brand brand-logo-mini" href="index.html"><img src="{% static 'assets/image/logo-mini.svg' %}" alt="logo"/></a>
+        </div>
+        <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+            <span class="icon-menu"></span>
+            </button>
+            <ul class="navbar-nav mr-lg-2">
+            <li class="nav-item nav-search d-none d-lg-block">
+                <div class="input-group">
+                <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
+                    <span class="input-group-text" id="search">
+                    <i class="icon-search"></i>
+                    </span>
+                </div>
+                <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now" aria-label="search" aria-describedby="search">
+                </div>
+            </li>
+            </ul>
+            <ul class="navbar-nav navbar-nav-right">
+            <li class="nav-item dropdown">
+                <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+                <i class="icon-bell mx-0"></i>
+                <span class="count"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+                <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                    <div class="preview-icon bg-success">
+                        <i class="ti-info-alt mx-0"></i>
+                    </div>
+                    </div>
+                    <div class="preview-item-content">
+                    <h6 class="preview-subject font-weight-normal">Application Error</h6>
+                    <p class="font-weight-light small-text mb-0 text-muted">
+                        Just now
+                    </p>
+                    </div>
+                </a>
+                <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                    <div class="preview-icon bg-warning">
+                        <i class="ti-settings mx-0"></i>
+                    </div>
+                    </div>
+                    <div class="preview-item-content">
+                    <h6 class="preview-subject font-weight-normal">Settings</h6>
+                    <p class="font-weight-light small-text mb-0 text-muted">
+                        Private message
+                    </p>
+                    </div>
+                </a>
+                <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                    <div class="preview-icon bg-info">
+                        <i class="ti-user mx-0"></i>
+                    </div>
+                    </div>
+                    <div class="preview-item-content">
+                    <h6 class="preview-subject font-weight-normal">New user registration</h6>
+                    <p class="font-weight-light small-text mb-0 text-muted">
+                        2 days ago
+                    </p>
+                    </div>
+                </a>
+                </div>
+            </li>
+            <li class="nav-item nav-profile dropdown">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+                <img src="{% static 'assets/image/faces/face28.jpg' %}" alt="profile"/>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+                <a class="dropdown-item">
+                    <i class="ti-settings text-primary"></i>
+                    Settings
+                </a>
+                <a class="dropdown-item">
+                    <i class="ti-power-off text-primary"></i>
+                    Logout
+                </a>
+                </div>
+            </li>
+            <li class="nav-item nav-settings d-none d-lg-flex">
+                <a class="nav-link" href="#">
+                <i class="icon-ellipsis"></i>
+                </a>
+            </li>
+            </ul>
+            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+            <span class="icon-menu"></span>
+            </button>
+        </div>
+        </nav>
+    
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+    <!-- partial:partials/_settings-panel.html -->
+    {% include "layoutpengguna/settingpengguna.html" %}
+    <!-- partial -->
+    {% include "layoutpengguna/sidebar.html" %}
+
+    <!-- partial:partials/_sidebar.html -->
+
+    <!-- partial -->
+    
+    <div class="main-panel">
+        <div class="content-wrapper">
+            <!-- content-ISI DISINI APA AJA -->
+        <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                <h4 class="card-title">Bordered table</h4>
+                <p class="card-description">
+                Add class <code>.table-bordered</code>
+                </p>
+                <div class="table-responsive pt-3">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>
+                        #
+                        </th>
+                        <th>
+                        First name
+                        </th>
+                        <th>
+                        Progress
+                        </th>
+                        <th>
+                        Amount
+                        </th>
+                        <th>
+                        Deadline
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                        1
+                        </td>
+                        <td>
+                        Herman Beck
+                        </td>
+                        <td>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        </td>
+                        <td>
+                        $ 77.99
+                        </td>
+                        <td>
+                        May 15, 2015
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        2
+                        </td>
+                        <td>
+                        Messsy Adam
+                        </td>
+                        <td>
+                        <div class="progress">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        </td>
+                        <td>
+                        $245.30
+                        </td>
+                        <td>
+                        July 1, 2015
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        3
+                        </td>
+                        <td>
+                        John Richards
+                        </td>
+                        <td>
+                        <div class="progress">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        </td>
+                        <td>
+                        $138.00
+                        </td>
+                        <td>
+                        Apr 12, 2015
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        4
+                        </td>
+                        <td>
+                        Peter Meggik
+                        </td>
+                        <td>
+                        <div class="progress">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        </td>
+                        <td>
+                        $ 77.99
+                        </td>
+                        <td>
+                        May 15, 2015
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        5
+                        </td>
+                        <td>
+                        Edward
+                        </td>
+                        <td>
+                        <div class="progress">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        </td>
+                        <td>
+                        $ 160.25
+                        </td>
+                        <td>
+                        May 03, 2015
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        6
+                        </td>
+                        <td>
+                        John Doe
+                        </td>
+                        <td>
+                        <div class="progress">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        </td>
+                        <td>
+                        $ 123.21
+                        </td>
+                        <td>
+                        April 05, 2015
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        7
+                        </td>
+                        <td>
+                        Henry Tom
+                        </td>
+                        <td>
+                        <div class="progress">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        </td>
+                        <td>
+                        $ 150.00
+                        </td>
+                        <td>
+                        June 16, 2015
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        <footer class="footer">
+        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2029.  LPPM <a href="https://lp2m.usk.ac.id/" target="_blank">LP2M The Next Generation</a> from Universtas Syiah Kuala. All rights reserved.</span>
+            
+        </div>
+        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Distributed by <a href="https://www.instagram.com/yovie_pramudya14/?igshid=MzMyNGUyNmU2YQ%3D%3D" target="_blank">Yovie Pramudya Sabri</a></span> 
+        </div>
+        </footer> 
+        <!-- partial -->
+    </div>
+    <!-- main-panel ends -->
+    </div>   
+    <!-- page-body-wrapper ends -->
+</div>
+<!-- container-scroller -->
+
+<!-- End custom js for this page-->
+</body>
+{% endblock content %}
+
+

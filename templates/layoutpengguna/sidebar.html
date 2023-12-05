@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<nav class="sidebar sidebar-offcanvas active" id="sidebar" >
+    <ul class="nav" >
+        <li class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+        <a class="nav-link" href="{% url "dashboard" %}">
+            <i class="fa-solid fa-fan fa-2xl menu-icon"></i>
+            <span class="menu-title">Dashboard</span>
+        </a>
+        </li>
+        <li class="nav-item {% if request.resolver_match.url_name == 'form' %}active{% endif %}">
+        <a class="nav-link" href="{% url "form" %}">
+            <i class="fa-brands fa-wpforms fa-2xl menu-icon"></i>
+            <span class="menu-title">Form</span>
+        </a>
+        </li>
+        <li class="nav-item {% if request.resolver_match.url_name == 'tabel_1' %}active{% endif %}">
+        <a class="nav-link" href="{% url "tabel_1" %}">
+            <i class="fa-solid fa-list-check fa-xl menu-icon"></i>
+            <span class="menu-title">Tabel</span>
+        </a>
+        </li>
+        
+    </ul>
+    </nav>
+{% endblock content %}

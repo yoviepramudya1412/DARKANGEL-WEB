@@ -1,0 +1,239 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<!--link rel="stylesheet" href="{% static 'assets/css/table-datatable.css' %}" /-->
+<link href="https://cdn.datatables.net/v/dt/dt-1.13.8/datatables.min.css" rel="stylesheet">
+<body>
+
+<div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+            <a class="navbar-brand brand-logo mr-5" href="{% url "dashboard" %}"><img src="{% static 'assets/image/LOGO-DASH.svg' %}" class="mr-2" alt="logo"/></a>
+            <a class="navbar-brand brand-logo-mini" href="{% url "dashboard" %}"><img src="{% static 'assets/image/logo-mini.svg' %}" alt="logo"/></a>
+        </div>
+        <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+            <span class="icon-menu"></span>
+            </button>
+            <ul class="navbar-nav mr-lg-2">
+            <li class="nav-item nav-search d-none d-lg-block">
+                <div class="input-group">
+                <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
+                    <span class="input-group-text" id="search">
+                    <i class="icon-search"></i>
+                    </span>
+                </div>
+                <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now" aria-label="search" aria-describedby="search">
+                </div>
+            </li>
+            </ul>
+            <ul class="navbar-nav navbar-nav-right">
+            <li class="nav-item dropdown">
+                <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+                <i class="icon-bell mx-0"></i>
+                <span class="count"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+                <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                    <div class="preview-icon bg-success">
+                        <i class="ti-info-alt mx-0"></i>
+                    </div>
+                    </div>
+                    <div class="preview-item-content">
+                    <h6 class="preview-subject font-weight-normal">Application Error</h6>
+                    <p class="font-weight-light small-text mb-0 text-muted">
+                        Just now
+                    </p>
+                    </div>
+                </a>
+                <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                    <div class="preview-icon bg-warning">
+                        <i class="ti-settings mx-0"></i>
+                    </div>
+                    </div>
+                    <div class="preview-item-content">
+                    <h6 class="preview-subject font-weight-normal">Settings</h6>
+                    <p class="font-weight-light small-text mb-0 text-muted">
+                        Private message
+                    </p>
+                    </div>
+                </a>
+                <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                    <div class="preview-icon bg-info">
+                        <i class="ti-user mx-0"></i>
+                    </div>
+                    </div>
+                    <div class="preview-item-content">
+                    <h6 class="preview-subject font-weight-normal">New user registration</h6>
+                    <p class="font-weight-light small-text mb-0 text-muted">
+                        2 days ago
+                    </p>
+                    </div>
+                </a>
+                </div>
+            </li>
+            <li class="nav-item nav-profile dropdown">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+                {% if user_profil_url %}
+                    <img src="{{ user_profil_url }}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;"  alt="Profil Gambar">
+                {% else %}
+                    <p>Profil gambar tidak tersedia.</p>
+                {% endif %}
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+                <a class="dropdown-item">
+                    <i class="ti-settings text-primary"></i>
+                    Settings
+                </a>
+                <a class="dropdown-item">
+                    <i class="ti-power-off text-primary"></i>
+                    Logout
+                </a>
+                </div>
+            </li>
+            <li class="nav-item nav-settings d-none d-lg-flex">
+                <a class="nav-link" href="#">
+                <i class="icon-ellipsis"></i>
+                </a>
+            </li>
+            </ul>
+            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+            <span class="icon-menu"></span>
+            </button>
+        </div>
+        </nav>
+    
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+    <!-- partial:partials/_settings-panel.html -->
+    {% include "layoutpengguna/settingpengguna.html" %}
+    <!-- partial -->
+    {% include "layoutpengguna/sidebar.html" %}
+
+    <!-- partial:partials/_sidebar.html -->
+
+    <!-- partial -->
+    
+    <div class="main-panel">
+        <div class="content-wrapper">
+            <!-- content-ISI DISINI APA AJA -->
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                <h4 class="card-title">Tabel Gambar User</h4>
+                <p class="card-description">
+                Silahkan tambah gambar di  <a href="{% url "form" %}">halaman form</a>
+                </p>
+                <div class="">
+                    {% if pengolahan_data %}
+                <table class=" table table-bordered display" id="" style="width:100%">
+    
+        <thead>
+            <tr>
+                <th class="center-text">ID</th>
+                <th class="center-text">Staff</th>
+                
+                <th class="center-text">Sampel 2</th>
+                
+                <th class="center-text">Hapus</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pengolahan in pengolahan_data %}
+                <tr>
+                    <td>{{ pengolahan.staff.nip }}</td>
+                    <td>{{ pengolahan.staff.nama }}</td>
+                    
+                    <td class="center-image"><img src="{{ pengolahan.sampel_2.url }}" style="width: 70px; height: 70px; object-fit: cover; border-radius: 50%;" alt="Sampel 2"></td>
+                    
+                    <td class="center-image"><a href="#" onclick="confirmDelete('{{ pengolahan.staff.nip }}', {{ pengolahan.id }})"><i class="fa-solid fa-trash-can fa-2xl"></a></i></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    
+{% else %}
+    <p>Tidak ada data Pengolahan untuk ditampilkan.</p>
+{% endif %}
+                </table>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        <footer class="footer">
+        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2029.  LPPM <a href="https://lp2m.usk.ac.id/" target="_blank">LP2M The Next Generation</a> from Universtas Syiah Kuala. All rights reserved.</span>
+            
+        </div>
+        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Distributed by <a href="https://www.instagram.com/yovie_pramudya14/?igshid=MzMyNGUyNmU2YQ%3D%3D" target="_blank">Yovie Pramudya Sabri</a></span> 
+        </div>
+        </footer> 
+        <!-- partial -->
+    </div>
+    <!-- main-panel ends -->
+    </div>   
+    <!-- page-body-wrapper ends -->
+</div>
+<!-- container-scroller -->
+<script>
+    $('table.display').DataTable();
+        function confirmDelete(nip, pengolahanId) {
+        Swal.fire({
+        title: 'Konfirmasi Hapus Data',
+        text: `Anda yakin ingin menghapus data dengan NIP ${nip}?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Ya, hapus!',
+        cancelButtonText: 'Batal'
+        }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = `/delete_pengolahan/${pengolahanId}/`;
+        }
+        });
+        return false;
+    }
+    {% if messages %}
+        {% for message in messages %}
+        {% if message.tags == 'warning' %}
+            Swal.fire({
+            icon: 'error',
+            title: '{{ message }}',
+            showConfirmButton: false,
+            timer: 2000
+            });
+        {% elif message.tags == 'warning' %}
+            Swal.fire({
+            icon: 'error',
+            title: '{{ message }}',
+            showConfirmButton: false,
+            timer: 2000
+            });
+        
+        {% elif message.tags == 'error' %}
+            Swal.fire({
+            icon: 'error',
+            title: '{{ message }}',
+            showConfirmButton: false,
+            timer: 2000
+            });
+        {% endif %}
+        {% endfor %}
+    {% endif %}
+</script>
+
+</body>
+
+{% endblock content %}
+
+

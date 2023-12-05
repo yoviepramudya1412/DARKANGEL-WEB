@@ -67,7 +67,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 
 
-
 def generate_filename(instance, filename):
     ext = filename.split('.')[-1]
     filename = f"{uuid.uuid4()}.{ext}"
@@ -79,10 +78,10 @@ def generate_filename2(instance, filename):
 
 class Pengolahan(models.Model):
     id = models.AutoField(primary_key=True)
-    staff = models.name = models.ForeignKey(CustomUser, related_name='pengolahan', on_delete=models.CASCADE)
+    staff = models.ForeignKey(CustomUser, related_name='pengolahan', on_delete=models.CASCADE)
     sampel_1 = models.ImageField(upload_to=generate_filename, null=True, blank=True)
     sampel_2 = models.ImageField(upload_to=generate_filename2, null=True, blank=True)
-    profil = models.ImageField(upload_to='profil/', null=True, blank=True)
+    
 
     def __str__(self):
         return self.staff.nama 

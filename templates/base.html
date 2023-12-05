@@ -2,12 +2,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Halo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <title>TURImuka</title>
+
+    <!-- OG Meta Tags to improve the way the post looks when you share the page on LinkedIn, Facebook, Google+ -->
+	<meta property="og:site_name" content="" /> <!-- website name -->
+	<meta property="og:site" content="" /> <!-- website link -->
+	<meta property="og:title" content=""/> <!-- title shown in the actual shared post -->
+	<meta property="og:description" content="" /> <!-- description shown in the actual shared post -->
+	<meta property="og:image" content="" /> <!-- image link, make sure it's jpg -->
+	<meta property="og:url" content="" /> <!-- where do you want your post to link to -->
+	<meta property="og:type" content="article" />
+
+    
+    
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700&display=swap&subset=latin-ext" rel="stylesheet">
+    <!--link rel="stylesheet" href="{% static 'assets/css/table-datatable.css' %}" /-->
+    <link href="https://cdn.datatables.net/v/dt/dt-1.13.8/datatables.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="{% static 'assets/css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/css/custom.css' %}" rel="stylesheet">
+    
+    <link href="{% static 'assets/css/swiper.css' %}" rel="stylesheet">
+	<link href="{% static 'assets/css/magnific-popup.css' %}" rel="stylesheet">
+	<link href="{% static 'assets/css/styles.css' %}" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'assets/vendors/feather/feather.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/ti-icons/css/themify-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/css/vendor.bundle.base.css' %}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="{% static 'assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/ti-icons/css/themify-icons.css' %}">
+    <!--link rel="stylesheet" type="text/css" href="{% static 'assets/js/select.dataTables.min.css' %}"-->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="{% static 'assets/css/vertical-layout-light/style.css' %}">
+	
+	<!-- Favicon  -->
+    <!--link rel="icon" href="assets/image/favicon.png"-->
+
+    <style>
+        a.back-to-top {
+	position: fixed;
+	z-index: 999;
+	right: 0.75rem;
+	bottom: 0.75rem;
+	display: none;
+	width: 2.625rem;
+	height: 2.625rem;
+	border-radius: 1.875rem;
+	background: #4f3cda url({% static "assets/image/up-arrow.png" %}) no-repeat center 47%;
+	background-size: 1.125rem 1.125rem;
+	text-indent: -9999px;
+}
+select {
+    /* you should keep these first rules in place to maintain cross-browser behavior */
+    -webkit-appearance: none;
+	-moz-appearance: none;
+	-ms-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+    background-image: url({% static "assets/image/down-arrow.png" %});
+    background-position: 96% 50%;
+    background-repeat: no-repeat;
+    outline: none;
+}
+    </style>
 </head>
 <body>
+    
     {% block content %}
     {% endblock content %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js" integrity="sha512-Ysw1DcK1P+uYLqprEAzNQJP+J4hTx4t/3X2nbVwszao8wD+9afLjBQYjz7Uk4ADP+Er++mJoScI42ueGtQOzEA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js" integrity="sha512-0QbL0ph8Tc8g5bLhfVzSqxe9GERORsKhIn1IrpxDAgUsbBGz/V7iSav2zzW325XGd1OMLdL4UiqRJj702IeqnQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdn.datatables.net/v/dt/dt-1.13.8/datatables.min.js"></script>
+    <!--script src="{% static 'assets/js/umd/simple-datatables.js' %} "></!--script-->
+    <!--script-- src="{% static 'assets/js/simple-datatables.js' %} "></!--script-->
+    <!--script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></!--script>
+    <!--script src="{% static 'assets/js/jquery.min.js' %}"></!--script> <!-- jQuery for Bootstrap's JavaScript plugins -->
+    <script src="{% static 'assets/js/popper.min.js' %}"></script> <!-- Popper tooltip library for Bootstrap -->
+    <!--script src="{% static 'assets/js/bootstrap.min.js' %}"></!--script> <!-- Bootstrap framework -->
+    <!--script src="{% static 'assets/js/jquery.easing.min.js' %}"></!--script> <!-- jQuery Easing for smooth scrolling between anchors -->
+    <!--script src="{% static 'assets/js/swiper.min.js' %}"></!--script> <!-- Swiper for image and text sliders -->
+    <script src="{% static 'assets/js/jquery.magnific-popup.js' %}"></script> <!-- Magnific Popup for lightboxes -->
+    <script src="{% static 'assets/js/validator.min.js' %}"></script> <!-- Validator.js - Bootstrap plugin that validates forms -->
+    <script src="{% static 'assets/js/scripts.js' %}"></script> <!-- Custom scripts -->
+    
+    <!-- plugins:js -->
+    <script src="{% static 'assets/vendors/js/vendor.bundle.base.js' %}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="{% static 'assets/vendors/chart.js/Chart.min.js' %}"></script>
+    <script src="{% static 'assets/vendors/datatables.net/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js' %}"></script>
+    <script src="{% static 'assets/js/dataTables.select.min.js' %}"></script>
+
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{% static 'assets/js/off-canvas.js' %}"></script>
+    <script src="{% static 'assets/js/hoverable-collapse.js' %}"></script>
+    <script src="{% static 'assets/js/template.js' %}"></script>
+    <script src="{% static 'assets/js/settings.js' %}"></script>
+    <script src="{% static 'assets/js/todolist.js' %}"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="{% static 'assets/js/dashboard.js' %}"></script>
+    <script src="{% static 'assets/js/file-upload.js' %}"></script>
+    <script src="{% static 'assets/js/typeahead.js' %}"></script>
+    <script src="{% static 'assets/js/select2.js' %}"></script>
+    <script src="{% static 'assets/js/Chart.roundedBarCharts.js' %}"></script>
 </body>
 </html>

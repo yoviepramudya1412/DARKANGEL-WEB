@@ -1,0 +1,335 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<body>
+<div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+            <a class="navbar-brand brand-logo mr-5" href="{% url "dashboard" %}"><img src="{% static 'assets/image/LOGO-DASH.svg' %}" class="mr-2" alt="logo"/></a>
+            <a class="navbar-brand brand-logo-mini" href="{% url "dashboard" %}"><img src="{% static 'assets/image/logo-mini.svg' %}" alt="logo"/></a>
+        </div>
+        <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+            <span class="icon-menu"></span>
+            </button>
+            <ul class="navbar-nav mr-lg-2">
+            <li class="nav-item nav-search d-none d-lg-block">
+                <div class="input-group">
+                <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
+                    <span class="input-group-text" id="search">
+                    <i class="icon-search"></i>
+                    </span>
+                </div>
+                <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now" aria-label="search" aria-describedby="search">
+                </div>
+            </li>
+            </ul>
+            <ul class="navbar-nav navbar-nav-right">
+            <li class="nav-item dropdown">
+                <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+                <i class="icon-bell mx-0"></i>
+                <span class="count"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+                <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                    <div class="preview-icon bg-success">
+                        <i class="ti-info-alt mx-0"></i>
+                    </div>
+                    </div>
+                    <div class="preview-item-content">
+                    <h6 class="preview-subject font-weight-normal">Application Error</h6>
+                    <p class="font-weight-light small-text mb-0 text-muted">
+                        Just now
+                    </p>
+                    </div>
+                </a>
+                <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                    <div class="preview-icon bg-warning">
+                        <i class="ti-settings mx-0"></i>
+                    </div>
+                    </div>
+                    <div class="preview-item-content">
+                    <h6 class="preview-subject font-weight-normal">Settings</h6>
+                    <p class="font-weight-light small-text mb-0 text-muted">
+                        Private message
+                    </p>
+                    </div>
+                </a>
+                <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                    <div class="preview-icon bg-info">
+                        <i class="ti-user mx-0"></i>
+                    </div>
+                    </div>
+                    <div class="preview-item-content">
+                    <h6 class="preview-subject font-weight-normal">New user registration</h6>
+                    <p class="font-weight-light small-text mb-0 text-muted">
+                        2 days ago
+                    </p>
+                    </div>
+                </a>
+                </div>
+            </li>
+            <li class="nav-item nav-profile dropdown">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+                {% if user_profil_url %}
+                    <img src="{{ user_profil_url }}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;" alt="Profil Gambar">
+                {% else %}
+                    <p>Profil gambar tidak tersedia.</p>
+                {% endif %}
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+                <a class="dropdown-item">
+                    <i class="ti-settings text-primary"></i>
+                    Settings
+                </a>
+                <a class="dropdown-item">
+                    <i class="ti-power-off text-primary"></i>
+                    Logout
+                </a>
+                </div>
+            </li>
+            <li class="nav-item nav-settings d-none d-lg-flex">
+                <a class="nav-link" href="#">
+                <i class="icon-ellipsis"></i>
+                </a>
+            </li>
+            </ul>
+            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+            <span class="icon-menu"></span>
+            </button>
+        </div>
+        </nav>
+    
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+    <!-- partial:partials/_settings-panel.html -->
+    {% include "layoutpengguna/settingpengguna.html" %}
+    <!-- partial -->
+    {% include "layoutpengguna/sidebar.html" %}
+
+    <!-- partial:partials/_sidebar.html -->
+
+    <!-- partial -->
+    
+    <div class="main-panel">
+        <div class="content-wrapper">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Cek NIP terlebih dahulu yuk !!</h4>
+                <p class="card-description">
+                Hal ini untuk memastikan <code>kesesuaian NIP</code> dengan nama anda yang akan dimasukkan kedalam sistem
+                </p>
+                <form class="form-inline" action="{% url 'ceknip' %}" method="get" id="cekNIPForm">
+                
+            <label class="sr-only" for="inlineFormInputGroupUsername2">NIP</label>
+                <div class="input-group mb-2 mr-sm-2">
+                    <div class="input-group-prepend">
+                    <div class="input-group-text">NIP</div>
+                    </div>
+                    <div class="">
+                        <input type="text" name="cekNIP" class="form-control" id="inlineFormInputGroupUsername2" placeholder="Isi dengan NIP" style="width: 300px;">
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary mb-2 ">CEK NIP</button>
+                </form>
+            </div>
+            </div>
+        </div>
+        <div class="col-12 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                    <h4 class="card-title">Penguploadan gambar foto</h4>
+                    <form class="form-sample" method="POST" action="{% url 'tambahfoto' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <p class="card-description">
+                        Personal info
+                        </p>
+                        <!--batas suci -->
+
+
+
+                        
+                        <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Foto Wajah</label>
+                            <div class="col-sm-9">
+                                <input type="file" id="file-upload" class="form-control" name="sampel" accept="image/*"  multiple/>
+                            </div>
+                            </div>
+                        </div>
+                            
+                        
+                        <p class="card-description">
+                        Nama
+                    </p>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Nama</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="nama" value="" readonly/>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <p class="card-description">
+                        NIP Terverifikasi
+                    </p>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">NIP</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="nip" value="" readonly disabled/>
+                            </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+
+                            <button type="submit" class="btn btn-primary ml-lg-5">Submit</button>
+                        </div>
+                        </div>
+                    </form>
+                    
+                    </div>
+                </div>
+                <div class="card mt-lg-2">
+                    <div class="col-12 card-body">
+                        <div class=" hello" id="image-preview-container"></div>
+                </div>
+                </div>
+                
+                </div>
+        </div>
+        
+
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        <footer class="footer">
+        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2029.  LPPM <a href="https://lp2m.usk.ac.id/" target="_blank">LP2M The Next Generation</a> from Universtas Syiah Kuala. All rights reserved.</span>
+            
+        </div>
+        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Distributed by <a href="https://www.instagram.com/yovie_pramudya14/?igshid=MzMyNGUyNmU2YQ%3D%3D" target="_blank">Yovie Pramudya Sabri</a></span> 
+        </div>
+        </footer> 
+        <!-- partial -->
+    </div>
+    <!-- main-panel ends -->
+    </div>   
+    <!-- page-body-wrapper ends -->
+</div>
+<!-- container-scroller -->
+
+<script>
+    document.getElementById('file-upload').addEventListener('change', function (event) {
+            previewImages(event);
+        });
+
+        function previewImages(event) {
+            var input = event.target;
+            var container = document.getElementById('image-preview-container');
+            
+            // Clear the container before adding new preview images
+            container.innerHTML = '';
+
+            if (input.files && input.files.length > 0) {
+                for (var i = 0; i < input.files.length; i++) {
+                    var reader = new FileReader();
+                    var preview = document.createElement('div');
+                    preview.className = 'preview-container';
+
+                    var img = document.createElement('img');
+                    img.className = 'image-preview';
+
+                    reader.onload = (function (image) {
+                        return function (e) {
+                            image.src = e.target.result;
+                        };
+                    })(img);
+
+                    reader.readAsDataURL(input.files[i]);
+
+                    preview.appendChild(img);
+                    container.appendChild(preview);
+                }
+            }
+        }
+
+        //batas suci
+
+    document.getElementById('cekNIPForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    var cekNIP = document.getElementsByName('cekNIP')[0].value;
+
+    fetch('{% url 'ceknip' %}?cekNIP=' + cekNIP)
+        .then(response => response.json())
+        .then(data => {
+            if (data.found) {
+                // Update the input fields with the found data
+                document.querySelector('input[name="nama"]').value = data.nama;
+                document.querySelector('input[name="nip"]').value = data.nip;
+
+                Swal.fire({
+                    title: 'Data Ditemukan',
+                    text: 'Nama: ' + data.nama + '\nNIP: ' + data.nip,
+                    icon: 'success'
+                });
+            } else {
+                Swal.fire({
+                    title: 'Data Tidak Ditemukan',
+                    text: 'NIP tidak ditemukan dalam database.',
+                    icon: 'error'
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+});
+
+    {% if messages %}
+        {% for message in messages %}
+        {% if message.tags == 'success' %}
+            Swal.fire({
+            icon: 'success',
+            title: '{{ message }}',
+            showConfirmButton: false,
+            timer: 2000
+            });
+        {% elif message.tags == 'warning' %}
+            Swal.fire({
+            icon: 'error',
+            title: '{{ message }}',
+            showConfirmButton: false,
+            timer: 2000
+            });
+        
+        {% elif message.tags == 'error' %}
+            Swal.fire({
+            icon: 'error',
+            title: '{{ message }}',
+            showConfirmButton: false,
+            timer: 2000
+            });
+        {% endif %}
+        {% endfor %}
+    {% endif %}
+</script>
+
+
+</body>
+{% endblock content %}
+
+

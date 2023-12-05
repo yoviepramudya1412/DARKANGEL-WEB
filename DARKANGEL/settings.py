@@ -137,6 +137,9 @@ MEDIA_ROOT= os.path.join(BASE_DIR,'image')
 
 AUTH_USER_MODEL = 'core.CustomUser'
 
+#login
+LOGIN_URL = '/masuk'
+
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
